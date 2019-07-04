@@ -1,39 +1,62 @@
-console.log("Bienvenue dans Notre Jeu !");
-console.log("On Va chercher un numero entre 0 et 100");
 
-var but = Math.floor(Math.random() * 100) + 1; //il choisi un numero dans l'intervalle de [1..100]//
-//"+1" car random (100) est dans l'intervalle de [0..99]//  
-var nbrelimite = 7; //nombre limite d'essai d'essai sont 8 mais on ecrire 7 car il commance a quanter a partir de 0//  
-var nbressai = 0;
-for (nbressai = 0; nbressai <= nbrelimite; nbressai++) {
-  essai = Number(prompt("Entrer un numero et essayer votre chance"));
-  if (but == essai) {
-    console.log("Vous avez gagné ! La réponse est :" + but + ".");
-    break //"break" est pour arreter et terminer le jeux lorsque il donne la bonne reponse// 
+
+
+
+function manche() {
+  var but = Math.floor(Math.random() * 100) + 1;   // nb a deviner
+  var cpt = 0;    // nb de coups pour le trouver
+  var saisie;     // nb tape par le joueur
+  var msg = 'Le nombre a deviner est compris entre ' + 1 + ' et ' + 100 + '.';
+  var limite = 8;
+
+  do { 
+    saisie = prompt(msg);
+
+    // si "Annuler"
+
+    if (saisie == null)
+      return 0;
+    
+    cpt++;
+   
+    if (saisie > but)
+      msg = "votre numero est superieur de numero cherchant";
+    else
+      msg = "votre numero inferieur de numero cherchant";
+   
   }
+  while (saisie != but && cpt<3 );
 
-  else if (nbressai == nbrelimite) {
-    console.log("Malheureusement ... Tu fini toutes vos essai et la solution est " + but + "...");
-    break 
-  }
 
-  else if (essai < but) {
-    console.log(" Votre numero " + essai + " est petit.");
-     //il retourne un message pour approcher le resultat pour le joueur//
-    if (essai < 1) {
-      console.log(" Votre Numero " + essai + " est inférieur a le numero miniimum du jeux ! Tu dois choisi un numero de 1..100");
-      //cette condition pour ne depasse jamais les limites//
+  return cpt;
+   
+}
+
+
+
+function Partie() {
+  var cpt = 0;    // nb de manches jouees
+  var best_score = 0;     // meilleur score
+  var score;      // score de la partie en cours
+  var continuer;
+  var limite=8;
+  
+  do {
+    score = manche();   // joue la manche
+    if (score) {
+      cpt++;
+      if (score < best_score || best_score == 0 )
+        best_score = score;
+      continuer = confirm("Bravo, tu as gagne en " + score + " coups.\nVeux-tu rejouer ?");
+
     }
+    else
+      continuer = false;
   }
+  while (continuer );
+  
 
-  else if (essai > but) {
-    console.log(" Votre numero " + essai + " est grand.");
-    if (essai > 100) {
-      console.log(" Votre Numero " + essai + "est supérieur a le numero maximum du jeux ! Tu dois choisi un numero de 1..100");
-    }
-  }
-  else {
-    console.log("Votre saisie est invalide."); 
-    //il affiche un message lorsque le joueur n'ecrit pas un numero//
-  }
+  alert("Tu as joue " + cpt + " manche(s).\nTon meilleur score est de " + best_score + " coups.");
+  return best_score;
+
 }
